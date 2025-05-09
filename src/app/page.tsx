@@ -10,8 +10,15 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { createServerSupabaseClient } from "@/utils/supabase/server";
+import UserNav from "@/components/auth/user-nav";
 
 export default async function Home() {
+  const supabase = await createServerSupabaseClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
   const posts = [
     {
       id: 1,
@@ -45,7 +52,16 @@ export default async function Home() {
           <Link href="/" className="text-2xl font-bold">
             보일러플레이트
           </Link>
-          <Button>로그인</Button>
+          <div className="flex items-center gap-4">
+            {user && (
+              <div className="text-sm mr-2">
+                <span className="hidden md:inline">환영합니다, </span>
+                <span className="font-medium">{user.email?.split("@")[0]}</span>
+                님
+              </div>
+            )}
+            <UserNav user={user} />
+          </div>
         </div>
       </header>
 

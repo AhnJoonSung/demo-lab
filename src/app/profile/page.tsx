@@ -11,8 +11,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import Link from "next/link";
-import { LogoutButton } from "@/components/auth/buttons";
-import { Navbar } from "@/components/navbar";
+import { Navbar } from "@/components/nav";
 
 export default async function Profile() {
   const supabase = await createServerSupabaseClient();

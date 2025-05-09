@@ -1,3 +1,11 @@
+/**
+ * @file user-nav.tsx
+ * @description 사용자 프로필 메뉴 컴포넌트
+ *
+ * 이 컴포넌트는 사용자 인증 상태에 따라 로그인 버튼 또는
+ * 프로필 드롭다운 메뉴를 표시합니다.
+ */
+
 "use client";
 
 import { User } from "@supabase/supabase-js";
@@ -17,13 +25,6 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Link from "next/link";
 
-/**
- * @file UserNav.tsx
- * @description 사용자 프로필 메뉴 컴포넌트
- *
- * 이 컴포넌트는 서버 컴포넌트에서 전달된 user 정보를 사용하여
- * 로그인 버튼 또는 프로필 드롭다운 메뉴를 표시합니다.
- */
 export default function UserNav({ user }: { user: User | null }) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);

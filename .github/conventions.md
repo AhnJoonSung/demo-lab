@@ -145,7 +145,7 @@ chmod +x .husky/*
 ```shell
 . "$(dirname -- "$0")/_/husky.sh"
 
-pnpm dlx lint-staged
+pnpm lint-staged
 ```
 
 ## NextJS Convention

@@ -15,17 +15,13 @@ import { Navbar } from "@/components/nav";
 
 export default async function Profile() {
   const supabase = await createServerSupabaseClient();
-
   const {
-    data: { session },
-  } = await supabase.auth.getSession();
+    data: { user },
+  } = await supabase.auth.getUser();
 
-  if (!session) {
+  if (!user) {
     redirect("/login");
   }
-
-  // session이 있으면 user도 있음을 보장
-  const user = session.user;
 
   return (
     <div className="min-h-screen flex flex-col">

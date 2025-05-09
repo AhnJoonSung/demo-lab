@@ -47,7 +47,6 @@ export default async function Home() {
     <div className="min-h-screen flex flex-col">
       <Navbar user={user} />
 
-      {/* 메인 컨텐츠 */}
       <main className="flex-1 container mx-auto py-6 px-4 sm:px-6 sm:py-8">
         <div className="flex flex-col">
           <h1 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6">

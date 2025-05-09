@@ -11,7 +11,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { createServerSupabaseClient } from "@/utils/supabase/server";
-import UserNav from "@/components/auth/user-nav";
+import { Navbar } from "@/components/navbar";
 
 export default async function Home() {
   const supabase = await createServerSupabaseClient();
@@ -46,24 +46,7 @@ export default async function Home() {
 
   return (
     <div className="min-h-screen flex flex-col">
-      {/* 헤더 */}
-      <header className="border-b">
-        <div className="container mx-auto flex justify-between items-center py-4">
-          <Link href="/" className="text-2xl font-bold">
-            보일러플레이트
-          </Link>
-          <div className="flex items-center gap-4">
-            {user && (
-              <div className="text-sm mr-2">
-                <span className="hidden md:inline">환영합니다, </span>
-                <span className="font-medium">{user.email?.split("@")[0]}</span>
-                님
-              </div>
-            )}
-            <UserNav user={user} />
-          </div>
-        </div>
-      </header>
+      <Navbar user={user} />
 
       {/* 메인 컨텐츠 */}
       <main className="flex-1 container mx-auto py-8">

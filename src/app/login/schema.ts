@@ -1,3 +1,28 @@
+/**
+ * @file schema.ts
+ * @description 로그인 및 회원가입 유효성 검사 스키마
+ *
+ * 이 파일은 로그인 및 회원가입 폼의 유효성 검사를 위한 Zod 스키마를 정의합니다.
+ * 이메일 및 비밀번호에 대한 유효성 검사 규칙을 설정합니다.
+ *
+ * 주요 기능:
+ * 1. 로그인 폼 유효성 검사 스키마 정의
+ * 2. 회원가입 폼 유효성 검사 스키마 정의 (강화된 비밀번호 요구사항)
+ * 3. 유효성 검사 결과에 따른 오류 메시지 설정
+ * 4. 타입 안전성을 위한 타입 정의
+ *
+ * 구현 로직:
+ * - Zod 라이브러리를 사용한 스키마 정의
+ * - 이메일 형식 검증 규칙 적용
+ * - 비밀번호 요구사항 검증 (isPasswordValid 유틸리티 활용)
+ * - 오류 메시지의 다국어 지원 (한국어)
+ * - 스키마 타입을 추론하여 타입 정의 생성
+ *
+ * @dependencies
+ * - zod
+ * - @/components/auth/requirements (비밀번호 요구사항 검증 유틸리티)
+ */
+
 import { z } from "zod";
 import { isPasswordValid } from "@/components/auth/requirements";
 

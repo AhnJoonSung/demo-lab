@@ -1,9 +1,33 @@
+/**
+ * @file middleware.ts
+ * @description Supabase 인증 미들웨어 유틸리티
+ *
+ * 이 파일은 Next.js 요청 처리 과정에서 Supabase 인증 세션을 업데이트하고
+ * 라우트 보호 및 리다이렉션 기능을 구현합니다.
+ *
+ * 주요 기능:
+ * 1. 요청마다 Supabase 세션 상태 확인 및 갱신
+ * 2. 인증 상태에 따른 라우트 접근 제어
+ * 3. 인증이 필요한 페이지에 대한 자동 리다이렉션
+ * 4. 로그인된 사용자에 대한 /login 페이지 접근 시 홈 페이지로 리다이렉션
+ *
+ * 구현 로직:
+ * - NextRequest, NextResponse를 사용한 요청/응답 처리
+ * - Supabase 쿠키 관리 및 세션 유지
+ * - 사용자 인증 상태 확인 및 라우트 가드 구현
+ * - 경로별 조건부 리다이렉션 처리
+ *
+ * @dependencies
+ * - @supabase/ssr
+ * - next/server
+ */
+
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
 export async function updateSession(request: NextRequest) {
   // 기본 응답 설정
-  let response = NextResponse.next({
+  const response = NextResponse.next({
     request: {
       headers: request.headers,
     },

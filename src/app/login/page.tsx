@@ -1,3 +1,32 @@
+/**
+ * @file page.tsx
+ * @description 로그인 및 회원가입 페이지 컴포넌트
+ *
+ * 이 파일은 애플리케이션의 로그인 및 회원가입 기능을 제공하는 페이지 컴포넌트를 정의합니다.
+ * 단일 컴포넌트 내에서 로그인/회원가입 모드 전환이 가능한 UI를 구현합니다.
+ *
+ * 주요 기능:
+ * 1. 로그인/회원가입 모드 전환 기능
+ * 2. Supabase 인증 연동 (Server Actions 활용)
+ * 3. 폼 유효성 검사 및 오류 표시
+ * 4. 비밀번호 요구사항 실시간 검증
+ * 5. 성공/실패 알림 및 리다이렉트 처리
+ *
+ * 구현 로직:
+ * - useActionState 훅을 사용한 서버 액션 상태 관리
+ * - React 상태를 통한 로그인/회원가입 모드 전환
+ * - 이메일/비밀번호 입력 폼 및 유효성 검사
+ * - 로그인/회원가입 성공 시 리다이렉트 처리
+ * - 비밀번호 요구사항 실시간 검증 UI
+ *
+ * @dependencies
+ * - next/navigation
+ * - next/link
+ * - @/components/ui/* (ShadcnUI)
+ * - @/components/auth/*
+ * - ./actions (서버 액션)
+ */
+
 "use client";
 
 import { useState, useEffect, useActionState } from "react";

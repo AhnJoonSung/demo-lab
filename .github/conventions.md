@@ -9,7 +9,7 @@
   - [prettier](#prettier)
   - [pre-commit](#pre-commit)
 - [NextJS Convention](#nextjs-convention)
-  - [File Convention](#file-convention)
+  - [File Name Convention](#file-name-convention)
   - [Function/Variable Convention](#functionvariable-convention)
   - [Component Convention](#component-convention)
   - [Directory Convention](#directory-convention)
@@ -28,7 +28,7 @@
 - [Module Convention](#module-convention)
   - [TailwindCSS](#tailwindcss)
   - [ShadCN Component](#shadcn-component)
-  - [Heroicons](#heroicons)
+  - [Lucide](#lucide)
   - [Jotai](#jotai)
   - [React Query](#react-query)
   - [Supabase](#supabase)
@@ -245,11 +245,11 @@ pnpm create jest@latest
 - 컴포넌트 사용 전 설치 여부를 확인해야 합니다: `/component/ui` 디렉토리 체크
 - 컴포넌트 설치 명령어를 사용해야 합니다: `pnpx shadcn@latest add [component-name]`
 
-### Heroicons
+### Lucide
 
-- 모든 아이콘은 Heroicons를 사용해야 합니다.
-- 아이콘 임포트 방법: `import { IconName } from '@heroicons/react/24/outline';`
-- 예시: `import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';`
+- 모든 아이콘은 Lucide를 사용해야 합니다.
+- 아이콘 임포트 방법: `import { IconName } from 'lucide-react';`
+- 예시: `import { Menu, X } from 'lucide-react';`
 
 ### Jotai
 

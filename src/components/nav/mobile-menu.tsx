@@ -1,6 +1,34 @@
+/**
+ * @file mobile-menu.tsx
+ * @description 모바일 사이드 메뉴 컴포넌트
+ *
+ * 이 파일은 모바일 화면에서 표시되는 사이드 메뉴 컴포넌트를 정의합니다.
+ * 햄버거 버튼 클릭 시 화면 좌측에서 나타나는 드로어 메뉴를 구현합니다.
+ *
+ * 주요 기능:
+ * 1. 모바일 화면에서 햄버거 메뉴 버튼 제공
+ * 2. 사이드 드로어 형태의 메뉴 구현
+ * 3. 네비게이션 링크 표시 (인증 상태에 따라 다른 메뉴 표시)
+ * 4. 테마 전환 기능 제공
+ * 5. 로그인/사용자 프로필 액세스 제공
+ *
+ * 구현 로직:
+ * - Sheet 컴포넌트를 활용한 사이드 메뉴 구현
+ * - 사용자 인증 상태에 따른 조건부 렌더링
+ * - navLinks 배열을 사용한 네비게이션 링크 생성
+ * - 클릭 이벤트 핸들러를 통한 메뉴 닫기 기능
+ *
+ * @dependencies
+ * - @supabase/supabase-js (User 타입)
+ * - lucide-react (아이콘)
+ * - @/components/ui/* (UI 컴포넌트)
+ * - ./user-nav (사용자 네비게이션 컴포넌트)
+ * - ./nav-links (네비게이션 링크 정의)
+ */
+
 "use client";
 
-import * as React from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { User } from "@supabase/supabase-js";
 import { Menu, X } from "lucide-react";
@@ -21,7 +49,7 @@ interface MobileMenuProps {
 }
 
 export function MobileMenu({ user }: MobileMenuProps) {
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>

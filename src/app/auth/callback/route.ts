@@ -1,3 +1,32 @@
+/**
+ * @file route.ts
+ * @description Supabase 인증 콜백 처리 API 라우트
+ *
+ * 이 파일은 Supabase 인증 프로세스의 콜백을 처리하는 API 라우트입니다.
+ * 로그인 또는 회원가입 후 Supabase가 리다이렉트하는 엔드포인트로,
+ * 인증 토큰을 검증하고 세션을 설정합니다.
+ *
+ * 주요 기능:
+ * 1. 이메일 OTP 인증 토큰 검증
+ * 2. 인증 코드를 세션으로 교환
+ * 3. 인증 성공 시 사용자를 원하는 페이지로 리다이렉트
+ * 4. 인증 실패 시 에러 페이지로 리다이렉트
+ *
+ * 구현 로직:
+ * - Next.js의 API 라우트 핸들러(GET 메서드) 사용
+ * - URL 쿼리 파라미터에서 token_hash, type, code, next 값 추출
+ * - Supabase 서버 클라이언트 생성 및 쿠키 관리
+ * - code 파라미터가 있는 경우 exchangeCodeForSession 메서드로 세션 생성
+ * - token_hash와 type 파라미터가 있는 경우 verifyOtp 메서드로 OTP 검증
+ * - 검증 성공 시 next 파라미터 URL로 리다이렉트 (기본값: /profile)
+ * - 실패 시 /auth/error로 리다이렉트
+ *
+ * @dependencies
+ * - next/server
+ * - @supabase/ssr
+ * - @supabase/supabase-js
+ */
+
 import { type EmailOtpType } from "@supabase/supabase-js";
 import { type NextRequest, NextResponse } from "next/server";
 import { createServerClient } from "@supabase/ssr";

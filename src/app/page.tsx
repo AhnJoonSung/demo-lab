@@ -1,3 +1,30 @@
+/**
+ * @file page.tsx
+ * @description 메인 홈페이지 컴포넌트
+ *
+ * 이 파일은 애플리케이션의 메인 홈페이지(/) 경로에 제공되는 페이지 컴포넌트를 정의합니다.
+ * 최근 게시글 목록을 보여주는 메인 화면을 렌더링합니다.
+ *
+ * 주요 기능:
+ * 1. 정적 게시글 데이터 표시
+ * 2. 사용자 인증 상태 확인
+ * 3. 반응형 카드 그리드 레이아웃 제공
+ * 4. 헤더 및 내비게이션 바 통합
+ *
+ * 구현 로직:
+ * - 서버 컴포넌트로 구현 ('use server' 지시문)
+ * - Supabase 클라이언트를 사용하여 현재 사용자 확인
+ * - 샘플 게시글 데이터 렌더링
+ * - ShadcnUI의 Card 컴포넌트를 활용한 게시글 표시
+ * - 반응형 그리드 레이아웃을 위한 Tailwind CSS 활용
+ *
+ * @dependencies
+ * - @/components/ui/button
+ * - @/components/ui/card
+ * - @/utils/supabase/server
+ * - @/components/nav
+ */
+
 "use server";
 
 import { Button } from "@/components/ui/button";

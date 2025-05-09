@@ -1,3 +1,34 @@
+/**
+ * @file layout.tsx
+ * @description 애플리케이션 루트 레이아웃 컴포넌트
+ *
+ * 이 파일은 Next.js 애플리케이션의 기본 레이아웃을 정의합니다.
+ * 모든 페이지에 공통으로 적용되는 메타데이터, 폰트, SEO 설정 등이 포함됩니다.
+ *
+ * 주요 기능:
+ * 1. 메타데이터 및 SEO 최적화 설정
+ * 2. 전역 폰트 (Geist) 적용
+ * 3. 오픈그래프 및 트위터 카드 설정
+ * 4. 다크/라이트 테마 관리
+ * 5. 구조화된 데이터(JSON-LD) 적용
+ * 6. 웹 앱 매니페스트 연결
+ *
+ * 구현 로직:
+ * - Next.js 메타데이터 API를 사용한 SEO 최적화
+ * - ThemeProvider를 통한 다크 모드 지원
+ * - Geist 및 Geist Mono 폰트 통합
+ * - 공유 가능한 siteConfig를 통한 일관된 메타데이터 관리
+ * - Vercel Analytics 통합
+ *
+ * @dependencies
+ * - next/font/google
+ * - next
+ * - @vercel/analytics/next
+ * - @/components/ui/theme-provider
+ * - @/components/seo/JsonLd
+ * - @/utils/seo/constants
+ */
+
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";

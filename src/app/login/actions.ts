@@ -1,3 +1,31 @@
+/**
+ * @file actions.ts
+ * @description 로그인 및 회원가입 서버 액션
+ *
+ * 이 파일은 Next.js 서버 액션을 사용하여 Supabase 인증 기능을 구현합니다.
+ * 로그인 및 회원가입 폼 제출 처리와 유효성 검사를 담당합니다.
+ *
+ * 주요 기능:
+ * 1. 로그인 폼 처리 및 Supabase 인증
+ * 2. 회원가입 폼 처리 및 계정 생성
+ * 3. 폼 유효성 검사 (Zod 스키마 활용)
+ * 4. 사용자 친화적 에러 메시지 제공
+ * 5. 로그인 성공 시 리다이렉트 처리
+ *
+ * 구현 로직:
+ * - Next.js의 "use server" 지시문으로 서버 액션 정의
+ * - FormData에서 사용자 입력 추출 및 유효성 검사
+ * - Supabase 클라이언트를 사용하여 인증 요청 처리
+ * - 로그인/회원가입 과정에서 발생할 수 있는 다양한 오류 상황 처리
+ * - 인증 성공/실패 상태를 클라이언트에 전달하기 위한 ActionState 타입 정의
+ * - revalidatePath를 사용하여 성공 시 캐시 무효화
+ *
+ * @dependencies
+ * - next/cache
+ * - @/utils/supabase/server
+ * - ./schema (Zod 유효성 검사 스키마)
+ */
+
 "use server";
 
 import { revalidatePath } from "next/cache";

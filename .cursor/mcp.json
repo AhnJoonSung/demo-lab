@@ -1,0 +1,16 @@
+{
+  "mcpServers": {
+    "sequential-thinking": {
+      "command": "bunx",
+      "args": ["@modelcontextprotocol/server-sequential-thinking"]
+    },
+    "context7": {
+      "command": "bunx",
+      "args": ["@upstash/context7-mcp"]
+    },
+    "supabase": {
+      "command": "bunx",
+      "args": ["@supabase/mcp-server-supabase@latest", "--access-token", "your_supabase_access_token"]
+    }
+  }
+}

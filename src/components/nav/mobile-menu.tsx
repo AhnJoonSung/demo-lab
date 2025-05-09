@@ -37,9 +37,7 @@ export function MobileMenu({ user }: MobileMenuProps) {
       >
         <SheetHeader className="p-6 pb-2 text-left">
           <SheetTitle className="flex items-center justify-between">
-            <Link href="/" onClick={() => setOpen(false)}>
-              메뉴
-            </Link>
+            <p>메뉴</p>
             <Button variant="ghost" size="icon" onClick={() => setOpen(false)}>
               <X className="h-5 w-5" />
               <span className="sr-only">메뉴 닫기</span>

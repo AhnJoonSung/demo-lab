@@ -103,8 +103,8 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen p-4 sm:p-6 bg-muted/10">
-      <Card className="w-full min-w-sm shadow-md">
+    <div className="flex items-center justify-center min-h-screen p-4 sm:p-12 bg-muted/10">
+      <Card className="w-full max-w-screen-sm shadow-md">
         <CardHeader className="pb-4 sm:pb-6">
           <CardTitle className="text-2xl sm:text-3xl text-center">
             {mode === "login" ? "로그인" : "회원가입"}

@@ -103,35 +103,35 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen px-4">
-      <Card className="w-full min-w-xl px-6 sm:px-16">
-        <CardHeader className="pb-6">
-          <CardTitle className="text-3xl text-center">
+    <div className="flex items-center justify-center min-h-screen p-4 sm:p-6 bg-muted/10">
+      <Card className="w-full min-w-sm shadow-md">
+        <CardHeader className="pb-4 sm:pb-6">
+          <CardTitle className="text-2xl sm:text-3xl text-center">
             {mode === "login" ? "로그인" : "회원가입"}
           </CardTitle>
-          <CardDescription className="text-center text-lg">
+          <CardDescription className="text-center text-base sm:text-lg">
             {mode === "login"
               ? "계정에 로그인하세요."
               : "새 계정을 만들어보세요."}
           </CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="px-4 sm:px-6">
           {mode === "login" ? (
-            <form action={handleLoginSubmit} className="space-y-6">
+            <form action={handleLoginSubmit} className="space-y-4 sm:space-y-6">
               {currentState.error && (
-                <Alert variant="destructive">
+                <Alert variant="destructive" className="text-sm">
                   <AlertDescription>{currentState.error}</AlertDescription>
                 </Alert>
               )}
 
               {currentState.success && !currentState.shouldRedirect && (
-                <Alert>
+                <Alert className="text-sm">
                   <AlertDescription>{currentState.success}</AlertDescription>
                 </Alert>
               )}
 
-              <div className="space-y-3">
-                <Label htmlFor="email" className="text-base">
+              <div className="space-y-2 sm:space-y-3">
+                <Label htmlFor="email" className="text-sm sm:text-base">
                   이메일
                 </Label>
                 <Input
@@ -140,7 +140,7 @@ export default function LoginPage() {
                   type="email"
                   placeholder="name@example.com"
                   required
-                  className="h-12 text-base"
+                  className="h-10 sm:h-12 text-sm sm:text-base"
                   aria-invalid={!!currentState.fieldErrors?.email}
                   value={email}
                   onChange={handleEmailChange}
@@ -152,8 +152,8 @@ export default function LoginPage() {
                 )}
               </div>
 
-              <div className="space-y-3">
-                <Label htmlFor="password" className="text-base">
+              <div className="space-y-2 sm:space-y-3">
+                <Label htmlFor="password" className="text-sm sm:text-base">
                   비밀번호
                 </Label>
                 <Input
@@ -161,7 +161,7 @@ export default function LoginPage() {
                   name="password"
                   type="password"
                   required
-                  className="h-12 text-base"
+                  className="h-10 sm:h-12 text-sm sm:text-base"
                   aria-invalid={!!currentState.fieldErrors?.password}
                   onChange={handlePasswordChange}
                   value={password}
@@ -180,28 +180,31 @@ export default function LoginPage() {
                   type="button"
                   variant="link"
                   onClick={() => setMode("signup")}
-                  className="text-base"
+                  className="text-sm sm:text-base"
                 >
                   계정이 없으신가요? 회원가입
                 </Button>
               </div>
             </form>
           ) : (
-            <form action={handleSignupSubmit} className="space-y-6">
+            <form
+              action={handleSignupSubmit}
+              className="space-y-4 sm:space-y-6"
+            >
               {currentState.error && (
-                <Alert variant="destructive">
+                <Alert variant="destructive" className="text-sm">
                   <AlertDescription>{currentState.error}</AlertDescription>
                 </Alert>
               )}
 
               {currentState.success && (
-                <Alert>
+                <Alert className="text-sm">
                   <AlertDescription>{currentState.success}</AlertDescription>
                 </Alert>
               )}
 
-              <div className="space-y-3">
-                <Label htmlFor="email" className="text-base">
+              <div className="space-y-2 sm:space-y-3">
+                <Label htmlFor="email" className="text-sm sm:text-base">
                   이메일
                 </Label>
                 <Input
@@ -210,7 +213,7 @@ export default function LoginPage() {
                   type="email"
                   placeholder="name@example.com"
                   required
-                  className="h-12 text-base"
+                  className="h-10 sm:h-12 text-sm sm:text-base"
                   aria-invalid={!!currentState.fieldErrors?.email}
                   value={email}
                   onChange={handleEmailChange}
@@ -222,8 +225,8 @@ export default function LoginPage() {
                 )}
               </div>
 
-              <div className="space-y-3">
-                <Label htmlFor="password" className="text-base">
+              <div className="space-y-2 sm:space-y-3">
+                <Label htmlFor="password" className="text-sm sm:text-base">
                   비밀번호
                 </Label>
                 <Input
@@ -231,7 +234,7 @@ export default function LoginPage() {
                   name="password"
                   type="password"
                   required
-                  className="h-12 text-base"
+                  className="h-10 sm:h-12 text-sm sm:text-base"
                   aria-invalid={!!currentState.fieldErrors?.password}
                   onChange={handlePasswordChange}
                   value={password}
@@ -253,7 +256,7 @@ export default function LoginPage() {
                   type="button"
                   variant="link"
                   onClick={() => setMode("login")}
-                  className="text-base"
+                  className="text-sm sm:text-base"
                 >
                   이미 계정이 있으신가요? 로그인
                 </Button>
@@ -261,10 +264,10 @@ export default function LoginPage() {
             </form>
           )}
         </CardContent>
-        <CardFooter className="flex justify-center pt-4">
+        <CardFooter className="flex justify-center py-4 px-4 sm:px-6">
           <Link
             href="/"
-            className="text-base text-muted-foreground hover:text-primary"
+            className="text-sm sm:text-base text-muted-foreground hover:text-primary transition-colors"
           >
             홈으로 돌아가기
           </Link>

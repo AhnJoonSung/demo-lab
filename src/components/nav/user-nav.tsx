@@ -20,28 +20,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { createBrowserSupabaseClient } from "@/utils/supabase/client";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
 import Link from "next/link";
+import { LogoutButton } from "@/components/auth/buttons";
 
 export default function UserNav({ user }: { user: User | null }) {
-  const router = useRouter();
-  const [loading, setLoading] = useState(false);
-
-  const handleLogout = async () => {
-    setLoading(true);
-    try {
-      const supabase = createBrowserSupabaseClient();
-      await supabase.auth.signOut();
-      router.refresh();
-    } catch (error) {
-      console.error("로그아웃 중 오류가 발생했습니다:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   if (!user) {
     return (
       <Link href="/login">
@@ -74,19 +56,19 @@ export default function UserNav({ user }: { user: User | null }) {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <Link href="/profile">
-            <DropdownMenuItem className="cursor-pointer">
-              프로필
-            </DropdownMenuItem>
-          </Link>
+          <DropdownMenuItem className="p-0 focus:bg-transparent">
+            <Button
+              variant="ghost"
+              className="px-2 py-1.5 w-full justify-start h-8 font-normal"
+              asChild
+            >
+              <Link href="/profile">프로필</Link>
+            </Button>
+          </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem
-          className="cursor-pointer"
-          onClick={handleLogout}
-          disabled={loading}
-        >
-          {loading ? "로그아웃 중..." : "로그아웃"}
+        <DropdownMenuItem className="p-0 focus:bg-transparent">
+          <LogoutButton className="px-2 py-1.5 w-full justify-start h-8 font-normal" />
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

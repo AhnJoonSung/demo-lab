@@ -27,7 +27,7 @@ export function LogoutButton({ className }: { className?: string }) {
 
   return (
     <Button
-      variant="outline"
+      variant="ghost"
       onClick={handleLogout}
       disabled={loading}
       className={className}

@@ -49,7 +49,7 @@ import {
   PasswordRequirements,
   isPasswordValid,
 } from "@/components/auth/requirements";
-import { login, signup } from "./actions";
+import { login, signup } from "@/actions/auth";
 
 // 초기 상태 정의
 const initialState = {
@@ -148,14 +148,18 @@ export default function LoginPage() {
           {mode === "login" ? (
             <form action={handleLoginSubmit} className="space-y-4 sm:space-y-6">
               {currentState.error && (
-                <Alert variant="destructive" className="text-sm">
-                  <AlertDescription>{currentState.error}</AlertDescription>
+                <Alert variant="destructive">
+                  <AlertDescription className="text-red-500">
+                    {currentState.error}
+                  </AlertDescription>
                 </Alert>
               )}
 
               {currentState.success && !currentState.shouldRedirect && (
-                <Alert className="text-sm">
-                  <AlertDescription>{currentState.success}</AlertDescription>
+                <Alert>
+                  <AlertDescription className="text-green-600">
+                    {currentState.success}
+                  </AlertDescription>
                 </Alert>
               )}
 
@@ -221,14 +225,18 @@ export default function LoginPage() {
               className="space-y-4 sm:space-y-6"
             >
               {currentState.error && (
-                <Alert variant="destructive" className="text-sm">
-                  <AlertDescription>{currentState.error}</AlertDescription>
+                <Alert variant="destructive">
+                  <AlertDescription className="text-red-500">
+                    {currentState.error}
+                  </AlertDescription>
                 </Alert>
               )}
 
               {currentState.success && (
-                <Alert className="text-sm">
-                  <AlertDescription>{currentState.success}</AlertDescription>
+                <Alert>
+                  <AlertDescription className="text-green-600">
+                    {currentState.success}
+                  </AlertDescription>
                 </Alert>
               )}
 

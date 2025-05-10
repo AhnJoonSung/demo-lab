@@ -23,14 +23,14 @@
  * @dependencies
  * - next/cache
  * - @/utils/supabase/server
- * - ./schema (Zod 유효성 검사 스키마)
+ * - @/app/login/schema (Zod 유효성 검사 스키마)
  */
 
 "use server";
 
 import { revalidatePath } from "next/cache";
 import { createServerSupabaseClient } from "@/utils/supabase/server";
-import { loginSchema, signupSchema } from "./schema";
+import { loginSchema, signupSchema } from "@/types/schema";
 
 // 액션 함수들의 반환 타입 정의
 type ActionState = {
@@ -158,13 +158,12 @@ export async function signup(
       // 알려진 오류 패턴에 따라 더 친절한 메시지 제공
       let errorMessage = error.message;
       if (error.message.includes("already registered")) {
-        errorMessage = "이미 등록된 이메일 주소입니다.";
+        errorMessage = "이미 등록된 이메일 주소입니다. 로그인해 주세요.";
       }
-
       return { error: errorMessage, success: null };
     }
 
-    // 이미 존재하는 계정인지 확인 (이메일 인증이 활성화된 경우)
+    // Supabase가 error를 반환하지 않고, user.identities가 빈 배열인 경우(이메일 인증 활성화 시)
     if (data?.user && data.user.identities?.length === 0) {
       return {
         error: "이미 등록된 이메일 주소입니다. 로그인해 주세요.",

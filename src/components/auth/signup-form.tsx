@@ -71,6 +71,7 @@ export function SignupForm({
     useState(false);
   const router = useRouter();
   const [signupState, signupAction] = useActionState(signup, initialState);
+  const [isSignupSuccessful, setIsSignupSuccessful] = useState(false);
 
   // 리다이렉트 처리
   useEffect(() => {
@@ -83,6 +84,13 @@ export function SignupForm({
   useEffect(() => {
     setIsPasswordRequirementsMet(isPasswordValid(password));
   }, [password]);
+
+  // 회원가입 성공 여부 감지
+  useEffect(() => {
+    if (signupState?.success) {
+      setIsSignupSuccessful(true);
+    }
+  }, [signupState]);
 
   // 이메일 변경 핸들러
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -133,6 +141,7 @@ export function SignupForm({
           aria-invalid={!!signupState.fieldErrors?.email}
           value={email}
           onChange={handleEmailChange}
+          disabled={isSignupSuccessful}
         />
         {signupState.fieldErrors?.email && (
           <p className="text-sm text-destructive">
@@ -154,6 +163,7 @@ export function SignupForm({
           aria-invalid={!!signupState.fieldErrors?.password}
           onChange={handlePasswordChange}
           value={password}
+          disabled={isSignupSuccessful}
         />
         {signupState.fieldErrors?.password && (
           <p className="text-sm text-destructive">
@@ -165,7 +175,10 @@ export function SignupForm({
         <PasswordRequirements password={password} />
       </div>
 
-      <SignupButton isPasswordValid={isPasswordRequirementsMet} />
+      <SignupButton
+        isPasswordValid={isPasswordRequirementsMet}
+        isSignupSuccessful={isSignupSuccessful}
+      />
 
       <div className="relative my-4">
         <div className="absolute inset-0 flex items-center">
@@ -178,7 +191,11 @@ export function SignupForm({
         </div>
       </div>
 
-      <KakaoButton />
+      <div
+        className={isSignupSuccessful ? "opacity-50 pointer-events-none" : ""}
+      >
+        <KakaoButton />
+      </div>
 
       <div className="text-center">
         <Button

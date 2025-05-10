@@ -47,8 +47,10 @@ export function LoginButton() {
 // 회원가입 버튼 컴포넌트
 export function SignupButton({
   isPasswordValid,
+  isSignupSuccessful,
 }: {
   isPasswordValid: boolean;
+  isSignupSuccessful?: boolean;
 }) {
   const { pending } = useFormStatus();
 
@@ -56,9 +58,13 @@ export function SignupButton({
     <Button
       type="submit"
       className="w-full h-12 text-lg"
-      disabled={!isPasswordValid || pending}
+      disabled={!isPasswordValid || isSignupSuccessful || pending}
     >
-      {pending ? "처리 중..." : "회원가입"}
+      {pending
+        ? "처리 중..."
+        : isSignupSuccessful
+          ? "회원가입 완료! 이메일을 확인해주세요."
+          : "회원가입"}
     </Button>
   );
 }

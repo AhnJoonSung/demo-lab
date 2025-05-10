@@ -91,6 +91,9 @@ export async function login(
       if (error.message.includes("Invalid login credentials")) {
         errorMessage = "이메일 또는 비밀번호가 올바르지 않습니다.";
       }
+      if (error.message.includes("Email not confirmed")) {
+        errorMessage = "이메일 인증을 완료해주세요.";
+      }
 
       return { error: errorMessage, success: null };
     }
@@ -176,7 +179,7 @@ export async function signup(
     }
 
     return {
-      success: "회원가입 이메일을 확인해주세요.",
+      success: "이메일을 확인해주세요.",
       error: null,
     };
   } catch (error) {

@@ -20,11 +20,11 @@
  *
  * @dependencies
  * - zod
- * - @/components/auth/requirements (비밀번호 요구사항 검증 유틸리티)
+ * - @/components/auth/password-requirements (비밀번호 요구사항 검증 유틸리티)
  */
 
 import { z } from "zod";
-import { isPasswordValid } from "@/components/auth/requirements";
+import { isPasswordValid } from "@/components/auth/password-requirements";
 
 // 로그인 폼 스키마
 export const loginSchema = z.object({

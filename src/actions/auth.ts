@@ -6,24 +6,28 @@
  * 로그인 및 회원가입 폼 제출 처리와 유효성 검사를 담당합니다.
  *
  * 주요 기능:
- * 1. 로그인 폼 처리 및 Supabase 인증
- * 2. 회원가입 폼 처리 및 계정 생성
+ * 1. 이메일/비밀번호 로그인 폼 처리 및 Supabase 인증
+ * 2. 이메일/비밀번호 회원가입 폼 처리 및 계정 생성
  * 3. 폼 유효성 검사 (Zod 스키마 활용)
  * 4. 사용자 친화적 에러 메시지 제공
- * 5. 로그인 성공 시 리다이렉트 처리
+ * 5. 로그인 성공 시 홈('/경로')으로 리다이렉트 처리
+ * 6. 회원가입 성공 시 이메일 확인 안내
  *
  * 구현 로직:
  * - Next.js의 "use server" 지시문으로 서버 액션 정의
- * - FormData에서 사용자 입력 추출 및 유효성 검사
- * - Supabase 클라이언트를 사용하여 인증 요청 처리
- * - 로그인/회원가입 과정에서 발생할 수 있는 다양한 오류 상황 처리
- * - 인증 성공/실패 상태를 클라이언트에 전달하기 위한 ActionState 타입 정의
- * - revalidatePath를 사용하여 성공 시 캐시 무효화
+ * - `FormData`에서 사용자 입력 추출 및 유효성 검사 (`zod`)
+ * - `@/utils/supabase/server`의 `createServerSupabaseClient`를 사용하여 서버 측 Supabase 클라이언트 생성
+ * - `supabase.auth.signInWithPassword` 및 `supabase.auth.signUp` 메서드를 사용하여 인증 요청 처리
+ * - 로그인/회원가입 과정에서 발생할 수 있는 다양한 오류 상황 처리 및 커스텀 메시지 반환
+ * - 인증 성공/실패 상태를 클라이언트에 전달하기 위한 `ActionState` 타입 정의
+ * - `revalidatePath`를 사용하여 성공 시 캐시 무효화
+ * - 회원가입 시 이메일 인증을 위한 `emailRedirectTo` 설정
  *
  * @dependencies
  * - next/cache
  * - @/utils/supabase/server
- * - @/app/login/schema (Zod 유효성 검사 스키마)
+ * - @/types/schema (Zod 유효성 검사 스키마)
+ * - @supabase/supabase-js (auth 메서드)
  */
 
 "use server";

@@ -1,14 +1,8 @@
 ---
-description:
-globs: **/*.js,**/*.jsx,**/*.ts,**/*.tsx
-alwaysApply: false
----
----
 description: This rule defines Toss Frontend's design principles and coding standards, focusing on readability, predictability, cohesion, and loose coupling for maintainable React applications.
 globs: **/*.js,**/*.jsx,**/*.ts,**/*.tsx
 alwaysApply: false
 ---
-
 # Frontend Design Guideline
 
 This document summarizes key frontend design principles and rules, showcasing

@@ -1,10 +1,6 @@
 ---
-description:
-globs:
-alwaysApply: true
----
----
 description: This rule documents common errors, misconfigurations, and caveats encountered in this project, with solutions and preventive practices.
+globs:
 alwaysApply: true
 ---
 
@@ -17,8 +13,9 @@ alwaysApply: true
     ```bash
     NEXT_PUBLIC_SUPABASE_URL="https://project_id.supabase.co"
     NEXT_PUBLIC_SUPABASE_ANON_KEY="your_supabase_anon_key"
+    NEXT_PUBLIC_STORAGE_BUCKET="your_storage_bucket_name"
 
-    NEXT_PUBLIC_SITE_URL="your_site_url"
+    NEXT_PUBLIC_SITE_URL="http://localhost:3000"
 
     SUPABASE_SERVICE_ROLE="your_supabase_service_role"
     SUPABASE_DB_PASSWORD="your_supabase_db_password"

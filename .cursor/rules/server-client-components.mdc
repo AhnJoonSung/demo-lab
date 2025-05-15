@@ -1,9 +1,4 @@
 ---
-description:
-globs: **/*.js,**/*.jsx,**/*.ts,**/*.tsx
-alwaysApply: false
----
----
 description: This rule documents how this project handles the separation of server/client components, Supabase integration, and related errors and constraints based on actual implementation patterns.
 globs: **/*.js,**/*.jsx,**/*.ts,**/*.tsx
 alwaysApply: false

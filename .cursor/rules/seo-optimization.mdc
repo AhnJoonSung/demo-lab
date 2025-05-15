@@ -1,14 +1,8 @@
 ---
-description:
-globs: **/*.js,**/*.jsx,**/*.ts,**/*.tsx
-alwaysApply: false
----
----
 description: This rule describes how SEO is currently implemented in this project, covering metadata configuration, sitemap, robots.txt, and PWA support.
 globs: **/*.js,**/*.jsx,**/*.ts,**/*.tsx
 alwaysApply: false
 ---
-
 # SEO 최적화 가이드
 
 ## 핵심 파일

@@ -14,6 +14,7 @@ alwaysApply: false
 ```bash
 NEXT_PUBLIC_SUPABASE_URL="https://project_id.supabase.co"
 NEXT_PUBLIC_SUPABASE_ANON_KEY="your_supabase_anon_key"
+NEXT_PUBLIC_STORAGE_BUCKET="your_storage_bucket_name"
 
 NEXT_PUBLIC_SITE_URL="http://localhost:3000"
 
@@ -31,9 +32,8 @@ Cursor에서 Supabase MCP를 사용하려면 다음과 같이 `.cursor/mcp.json`
 {
   "mcpServers": {
     "supabase": {
-      "command": "npx",
+      "command": "bun x",
       "args": [
-        "-y",
         "@supabase/mcp-server-supabase@latest",
         "--access-token",
         "your_supabase_access_token"
@@ -61,6 +61,7 @@ Cursor에서 Supabase MCP를 사용하려면 다음과 같이 `.cursor/mcp.json`
 ```bash
 NEXT_PUBLIC_SUPABASE_URL="(mcp에서 얻은 URL)"
 NEXT_PUBLIC_SUPABASE_ANON_KEY="(mcp에서 얻은 ANON_KEY)"
+NEXT_PUBLIC_STORAGE_BUCKET="(스토리지 버킷 이름, 예: test-bucket)"
 ```
 
 ### 4. 서비스 롤 및 데이터베이스 비밀번호

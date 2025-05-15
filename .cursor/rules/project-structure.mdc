@@ -1,14 +1,8 @@
 ---
-description:
-globs: **/*.js,**/*.jsx,**/*.ts,**/*.tsx
-alwaysApply: false
----
----
 description: This rule documents how this project is structured using Next.js and Supabase, including routing, authentication, and file organization.
 globs: **/*.js,**/*.jsx,**/*.ts,**/*.tsx
 alwaysApply: false
 ---
-
 # Next.js + Supabase 보일러플레이트 구조
 
 ## 핵심 파일

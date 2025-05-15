@@ -1,110 +1,105 @@
 /**
  * @file page.tsx
- * @description 메인 홈페이지 컴포넌트
+ * @description Supabase Storage 드롭박스 스타일 업로드/리스트 페이지
  *
- * 이 파일은 애플리케이션의 메인 홈페이지(/) 경로에 제공되는 페이지 컴포넌트를 정의합니다.
- * 최근 게시글 목록을 보여주는 메인 화면을 렌더링합니다.
- *
- * 주요 기능:
- * 1. 정적 게시글 데이터 표시
- * 2. 사용자 인증 상태 확인
- * 3. 반응형 카드 그리드 레이아웃 제공
- * 4. 헤더 및 내비게이션 바 통합
- *
- * 구현 로직:
- * - 서버 컴포넌트로 구현 ('use server' 지시문)
- * - Supabase 클라이언트를 사용하여 현재 사용자 확인
- * - 샘플 게시글 데이터 렌더링
- * - ShadcnUI의 Card 컴포넌트를 활용한 게시글 표시
- * - 반응형 그리드 레이아웃을 위한 Tailwind CSS 활용
- *
- * @dependencies
- * - @/components/ui/button
- * - @/components/ui/card
- * - @/utils/supabase/server
- * - @/components/nav
+ * - 파일 업로드 후 즉시 리스트에 반영
+ * - 진입 시 파일 목록 조회
+ * - 이미지/문서 미리보기 및 다운로드 링크 제공
+ * - 누구나 업로드/조회 가능 (공개 버킷)
  */
 
-"use server";
+"use client";
 
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { createServerSupabaseClient } from "@/utils/supabase/server";
-import { Navbar } from "@/components/nav";
+import { useEffect, useState } from "react";
+import { listFiles } from "@/utils/supabase/storage";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { AlertCircle } from "lucide-react";
+import { Navbar } from "@/components/nav/navbar";
+import { FileUploader } from "@/components/ui/file-uploader";
+import { FileList } from "@/components/ui/file-list";
 
-export default async function Home() {
-  const supabase = await createServerSupabaseClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+const BUCKET_NAME = process.env.NEXT_PUBLIC_STORAGE_BUCKET || "test-bucket";
 
-  const posts = [
-    {
-      id: 1,
-      title: "Next.js + Supabase",
-      description:
-        "바이브 코딩 위한 최고의 스타터 템플릿\n지금 바로 경험해보세요!",
-      author: "Boilerplate",
-      date: "2024-08-01",
-    },
-    {
-      id: 2,
-      title: "Next.js + Supabase",
-      description: "1인 바이브 코더에게 최적화된\n최신 풀스택 개발 스택",
-      author: "Boilerplate",
-      date: "2024-08-02",
-    },
-    {
-      id: 3,
-      title: "AI 기반 개발 워크플로우",
-      description: "MCP와 커서룰의 완벽한 조합\n바이브 코딩 생산성 극대화",
-      author: "Boilerplate",
-      date: "2024-08-03",
-    },
-  ];
+export default function UploadPage() {
+  const [files, setFiles] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  // 파일 목록 조회
+  const fetchFiles = async () => {
+    setIsLoading(true);
+    setError("");
+
+    try {
+      const fileList = await listFiles();
+      setFiles(fileList);
+    } catch (err) {
+      console.error("파일 목록 조회 오류:", err);
+      setError("파일 목록을 불러오는 중 오류가 발생했습니다.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // 컴포넌트 마운트 시 파일 목록 조회
+  useEffect(() => {
+    fetchFiles();
+  }, []);
+
+  // 업로드 성공 핸들러
+  const handleUploadSuccess = () => {
+    fetchFiles(); // 파일 목록 새로고침
+  };
+
+  // 업로드 오류 핸들러
+  const handleUploadError = (errorMessage: string) => {
+    setError(errorMessage);
+  };
+
+  // 파일 삭제 핸들러
+  const handleFileDeleted = () => {
+    fetchFiles(); // 파일 목록 새로고침
+  };
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <Navbar user={user} />
+    <div className="min-h-screen flex flex-col bg-background text-foreground">
+      <Navbar user={null} />
 
-      <main className="flex-1 container mx-auto py-6 px-4 sm:px-6 sm:py-8">
-        <div className="flex flex-col">
-          <h1 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6">
-            최근 게시글
-          </h1>
+      <main className="flex-grow container mx-auto py-8 px-4 sm:px-6">
+        <div className="max-w-4xl mx-auto space-y-8">
+          <section>
+            <h1 className="text-3xl font-bold mb-6">파일 업로드</h1>
 
-          <div className="grid gap-4 sm:gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {posts.map((post) => (
-              <Card
-                key={post.id}
-                className="shadow-sm hover:shadow-md transition-shadow"
-              >
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-xl">{post.title}</CardTitle>
-                  <CardDescription className="text-sm">
-                    {post.date} | {post.author}
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <p className="whitespace-pre-line text-sm sm:text-base">
-                    {post.description}
-                  </p>
-                </CardContent>
-                <CardFooter className="pt-2">
-                  <Button variant="outline" className="w-full">
-                    자세히 보기
-                  </Button>
-                </CardFooter>
-              </Card>
-            ))}
-          </div>
+            <FileUploader
+              bucketName={BUCKET_NAME}
+              onUploadSuccess={handleUploadSuccess}
+              onUploadError={handleUploadError}
+            />
+          </section>
+
+          {error && (
+            <Alert variant="destructive">
+              <AlertCircle className="h-4 w-4" />
+              <AlertTitle>오류 발생</AlertTitle>
+              <AlertDescription>{error}</AlertDescription>
+            </Alert>
+          )}
+
+          <section className="pt-4">
+            {isLoading ? (
+              <div className="bg-muted/30 rounded-lg p-8 text-center animate-pulse">
+                <p className="text-muted-foreground">
+                  파일 목록을 불러오는 중...
+                </p>
+              </div>
+            ) : (
+              <FileList
+                files={files}
+                onDelete={handleFileDeleted}
+                onRefresh={fetchFiles}
+              />
+            )}
+          </section>
         </div>
       </main>
     </div>

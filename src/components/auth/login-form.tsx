@@ -13,6 +13,7 @@
  * 4. 로그인 로딩 상태 표시
  * 5. 카카오 소셜 로그인 버튼 및 구분선 포함
  * 6. 회원가입 모드로 전환하는 버튼 제공
+ * 7. 인증 상태는 revalidatePath와 onAuthStateChange를 통해 자동으로 갱신됨
  *
  * 구현 로직:
  * - React 상태(`useState`, `useActionState`)를 사용하여 폼 상태 및 서버 액션 상태 관리
@@ -66,6 +67,8 @@ export function LoginForm({
   // 리다이렉트 처리
   useEffect(() => {
     if (loginState?.shouldRedirect && loginState?.redirectTo) {
+      // login 서버 액션에서 revalidatePath를 호출하여 인증 상태를 전체 레이아웃에 반영
+      // Supabase의 onAuthStateChange 이벤트도 발생하여 AuthProvider 상태 갱신
       router.replace(loginState.redirectTo);
     }
   }, [loginState, router]);

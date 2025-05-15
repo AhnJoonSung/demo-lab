@@ -11,6 +11,7 @@
  * 2. `@/utils/supabase/server`의 `createServerSupabaseClient` 함수를 사용하여 서버 측 Supabase 클라이언트 생성 및 쿠키 관리
  * 3. 인증 성공 시 `next` 쿼리 파라미터로 지정된 페이지로 리다이렉트 (기본값: `/`)
  * 4. 인증 실패 시 `/auth/error` 페이지로 리다이렉트
+ * 5. revalidatePath를 통한 전체 앱 레이아웃 캐시 무효화로 인증 상태 즉시 반영
  *
  * 구현 로직:
  * - Next.js의 API 라우트 핸들러 (GET 메서드) 사용
@@ -18,9 +19,11 @@
  * - `code` 파라미터가 있는 경우 `exchangeCodeForSession` 메서드로 세션 교환 (주로 OAuth 콜백)
  * - `token_hash`와 `type` 파라미터가 있는 경우 `verifyOtp` 메서드로 OTP 검증 (주로 이메일 OTP 확인)
  * - 검증 결과를 바탕으로 성공 또는 실패 페이지로 리다이렉트
+ * - revalidatePath를 사용하여 전체 앱의 캐시를 무효화하고 인증 상태 변경 즉시 반영
  *
  * @dependencies
  * - next/server
+ * - next/cache
  * - @supabase/supabase-js
  * - @/utils/supabase/server (createServerSupabaseClient 함수)
  */
@@ -28,6 +31,7 @@
 import { type EmailOtpType } from "@supabase/supabase-js";
 import { type NextRequest, NextResponse } from "next/server";
 import { createServerSupabaseClient } from "@/utils/supabase/server";
+import { revalidatePath } from "next/cache";
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
@@ -49,6 +53,12 @@ export async function GET(request: NextRequest) {
       console.error("Code exchange error:", error);
       return NextResponse.redirect(new URL("/auth/error", request.url));
     }
+
+    // 전체 앱 레이아웃 캐시 무효화하여 인증 상태 변경 즉시 반영
+    // 이를 통해 AuthProvider의 onAuthStateChange 이벤트 발생 전에도 UI가 인증 상태를 인식함
+    revalidatePath("/", "layout");
+
+    // 사용자를 지정된 리다이렉트 URL로 이동
     return NextResponse.redirect(redirectUrl);
   }
 
@@ -59,6 +69,9 @@ export async function GET(request: NextRequest) {
       token_hash,
     });
     if (!error) {
+      // 전체 앱 레이아웃 캐시 무효화
+      revalidatePath("/", "layout");
+
       return NextResponse.redirect(redirectUrl);
     }
   }

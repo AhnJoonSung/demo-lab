@@ -54,7 +54,7 @@ export default async function Profile() {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <Navbar user={user} />
+      <Navbar />
 
       <div className="container mx-auto py-6 px-4 sm:px-6 sm:py-8 flex-1">
         <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 sm:gap-0 mb-6 sm:mb-8">

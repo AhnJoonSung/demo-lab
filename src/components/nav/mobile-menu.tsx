@@ -19,18 +19,17 @@
  * - 클릭 이벤트 핸들러를 통한 메뉴 닫기 기능
  *
  * @dependencies
- * - @supabase/supabase-js (User 타입)
  * - lucide-react (아이콘)
  * - @/components/ui/* (UI 컴포넌트)
  * - ./user-nav (사용자 네비게이션 컴포넌트)
  * - ./nav-links (네비게이션 링크 정의)
+ * - @/components/auth/auth-provider (인증 컨텍스트)
  */
 
 "use client";
 
 import { useState } from "react";
 import Link from "next/link";
-import { User } from "@supabase/supabase-js";
 import { Menu, X } from "lucide-react";
 import {
   Sheet,
@@ -43,13 +42,11 @@ import { Button } from "@/components/ui/button";
 import UserNav from "./user-nav";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { navLinks } from "./nav-links";
+import { useAuth } from "@/components/auth/auth-provider";
 
-interface MobileMenuProps {
-  user: User | null;
-}
-
-export function MobileMenu({ user }: MobileMenuProps) {
+export function MobileMenu() {
   const [open, setOpen] = useState(false);
+  const { user } = useAuth();
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
@@ -105,7 +102,7 @@ export function MobileMenu({ user }: MobileMenuProps) {
             {user && (
               <div className="flex items-center justify-between py-2 mt-4">
                 <span className="text-sm font-medium">계정</span>
-                <UserNav user={user} />
+                <UserNav />
               </div>
             )}
 

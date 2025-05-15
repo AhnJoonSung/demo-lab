@@ -12,6 +12,7 @@
  * 4. 사용자 친화적 에러 메시지 제공
  * 5. 로그인 성공 시 홈('/경로')으로 리다이렉트 처리
  * 6. 회원가입 성공 시 이메일 확인 안내
+ * 7. revalidatePath를 통한 전체 앱 레이아웃 캐시 무효화로 인증 상태 반영
  *
  * 구현 로직:
  * - Next.js의 "use server" 지시문으로 서버 액션 정의
@@ -20,7 +21,7 @@
  * - `supabase.auth.signInWithPassword` 및 `supabase.auth.signUp` 메서드를 사용하여 인증 요청 처리
  * - 로그인/회원가입 과정에서 발생할 수 있는 다양한 오류 상황 처리 및 커스텀 메시지 반환
  * - 인증 성공/실패 상태를 클라이언트에 전달하기 위한 `ActionState` 타입 정의
- * - `revalidatePath`를 사용하여 성공 시 캐시 무효화
+ * - `revalidatePath`를 사용하여 전체 앱의 캐시를 무효화하고 인증 상태 변경 즉시 반영
  * - 회원가입 시 이메일 인증을 위한 `emailRedirectTo` 설정
  *
  * @dependencies
@@ -98,9 +99,12 @@ export async function login(
       return { error: errorMessage, success: null };
     }
 
-    // 로그인 성공 시 세션 갱신 후 리다이렉트 플래그 반환
+    // 로그인 성공 시 전체 레이아웃을 새로고침하고 리다이렉트 플래그 반환
     if (data.session) {
+      // revalidatePath를 사용해 전체 앱의 레이아웃 캐시를 무효화하여 인증 상태 변경 즉시 반영
+      // AuthProvider의 onAuthStateChange 이벤트가 발생하기 전에도 UI에 인증 상태가 반영됨
       revalidatePath("/", "layout");
+
       return {
         success: "로그인 성공!",
         error: null,

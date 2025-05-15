@@ -16,6 +16,7 @@
  * - `createBrowserSupabaseClient`를 사용하여 클라이언트 측 Supabase 인증 로직 수행 (LogoutButton, KakaoButton)
  * - `signInWithOAuth` 메서드를 사용하여 소셜 로그인 처리 (KakaoButton)
  * - 라우팅 처리를 위해 `next/navigation`의 `useRouter` 사용
+ * - 인증 상태는 AuthProvider의 onAuthStateChange 이벤트에 의해 관리됨
  *
  * @dependencies
  * - react
@@ -79,7 +80,10 @@ export function LogoutButton({ className }: { className?: string }) {
     try {
       const supabase = createBrowserSupabaseClient();
       await supabase.auth.signOut();
-      router.refresh();
+
+      // onAuthStateChange 이벤트가 SIGNED_OUT 이벤트를 발생시키므로
+      // AuthProvider에서 자동으로 사용자 상태를 업데이트함
+      // 로그인 페이지로 직접 이동
       router.push("/login");
     } catch (error) {
       console.error("로그아웃 중 오류가 발생했습니다:", error);

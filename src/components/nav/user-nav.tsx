@@ -8,7 +8,6 @@
 
 "use client";
 
-import { User } from "@supabase/supabase-js";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -22,8 +21,11 @@ import {
 } from "@/components/ui/dropdown-menu";
 import Link from "next/link";
 import { LogoutButton } from "@/components/auth/buttons";
+import { useAuth } from "@/components/auth/auth-provider";
 
-export default function UserNav({ user }: { user: User | null }) {
+export default function UserNav() {
+  const { user } = useAuth();
+
   if (!user) {
     return (
       <Link href="/login">

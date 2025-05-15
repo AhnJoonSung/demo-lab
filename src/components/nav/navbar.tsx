@@ -10,23 +10,22 @@
 "use client";
 
 import Link from "next/link";
-import { User } from "@supabase/supabase-js";
 import { MobileMenu } from "./mobile-menu";
 import DesktopMenu from "./desktop-menu";
 
-export function Navbar({ user }: { user: User | null }) {
+export function Navbar() {
   return (
     <header className="border-b sticky top-0 bg-background/95 backdrop-blur z-10">
       <div className="container mx-auto flex justify-between items-center py-4 px-4 sm:px-6">
         <div className="flex items-center gap-3">
-          <MobileMenu user={user} />
+          <MobileMenu />
           <Link href="/" className="text-2xl font-bold">
             보일러플레이트
           </Link>
         </div>
 
         {/* 데스크탑 메뉴 */}
-        <DesktopMenu user={user} />
+        <DesktopMenu />
       </div>
     </header>
   );

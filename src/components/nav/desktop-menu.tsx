@@ -17,24 +17,23 @@
  * - 사용자 이메일에서 ID 부분 추출하여 표시
  * - UserNav 컴포넌트를 통한 사용자 드롭다운 메뉴 통합
  * - ThemeToggle 컴포넌트를 통한 테마 전환 기능 제공
+ * - useAuth 훅을 통한 인증 상태 접근
  *
  * @dependencies
- * - @supabase/supabase-js (User 타입)
  * - ./user-nav (사용자 네비게이션 컴포넌트)
  * - @/components/ui/theme-toggle (테마 전환 컴포넌트)
+ * - @/components/auth/auth-provider (인증 컨텍스트)
  */
 
 "use client";
 
-import { User } from "@supabase/supabase-js";
 import UserNav from "./user-nav";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
+import { useAuth } from "@/components/auth/auth-provider";
 
-interface DesktopMenuProps {
-  user: User | null;
-}
+export default function DesktopMenu() {
+  const { user } = useAuth();
 
-export default function DesktopMenu({ user }: DesktopMenuProps) {
   return (
     <div className="hidden md:flex items-center gap-4">
       {user && (
@@ -44,7 +43,7 @@ export default function DesktopMenu({ user }: DesktopMenuProps) {
         </div>
       )}
 
-      <UserNav user={user} />
+      <UserNav />
       <ThemeToggle />
     </div>
   );

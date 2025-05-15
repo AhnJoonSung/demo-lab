@@ -20,8 +20,8 @@ import {
   ExternalLink,
 } from "lucide-react";
 import { deleteFile, getPublicUrl, listFiles } from "@/utils/supabase/storage";
-import { Button } from "./button";
-import { Alert, AlertDescription, AlertTitle } from "./alert";
+import { Button } from "@/components/ui/button";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import {
   Dialog,
   DialogContent,
@@ -29,7 +29,7 @@ import {
   DialogTitle,
   DialogDescription,
   DialogFooter,
-} from "./dialog";
+} from "@/components/ui/dialog";
 
 type FileListProps = {
   files: Array<{ id?: string; name: string; metadata?: any }>;
@@ -212,7 +212,7 @@ export function FileList({
 
           return (
             <div
-              key={file.id || file.name}
+              key={file.id}
               className="group border rounded-lg p-3 transition-colors hover:bg-muted/50"
             >
               <div className="aspect-square relative bg-muted rounded-md mb-2 overflow-hidden">
@@ -225,7 +225,6 @@ export function FileList({
                         fill
                         className="object-cover"
                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                        unoptimized={true}
                       />
                     ) : (
                       <div className="flex items-center justify-center h-full">

@@ -15,8 +15,8 @@ import { listFiles } from "@/utils/supabase/storage";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
 import { Navbar } from "@/components/nav/navbar";
-import { FileUploader } from "@/components/ui/file-uploader";
-import { FileList } from "@/components/ui/file-list";
+import { FileUploader } from "@/components/storage/file-uploader";
+import { FileList } from "@/components/storage/file-list";
 
 const BUCKET_NAME = process.env.NEXT_PUBLIC_STORAGE_BUCKET || "test-bucket";
 

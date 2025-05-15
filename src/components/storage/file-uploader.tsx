@@ -10,9 +10,9 @@
 
 import { useState, useRef, useCallback } from "react";
 import { Upload, AlertCircle } from "lucide-react";
-import { Progress } from "./progress";
-import { Alert, AlertDescription, AlertTitle } from "./alert";
-import { getUploadUrl } from "@/actions/upload";
+import { Progress } from "@/components/ui/progress";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { getUploadUrl } from "@/actions/storage";
 
 type FileUploaderProps = {
   onUploadSuccess?: (path: string) => void;

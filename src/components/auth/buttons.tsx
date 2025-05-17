@@ -34,13 +34,33 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { createBrowserSupabaseClient } from "@/utils/supabase/client";
 import { useFormStatus } from "react-dom";
+import { Loader2 } from "lucide-react";
 
-export function LoginButton() {
+/*
+실제 로그인 흐름
+1. 사용자가 로그인 버튼 클릭
+2. 서버 액션 시작 → pending = true
+3. 서버 액션 완료 → pending = false
+4. 로그인 성공 시 → setIsLoading(true) 설정
+5. refreshUser() 호출 및 완료
+6. 리다이렉트 시작
+7. (리다이렉트 후) → isLoading = false(새 페이지에서 리셋)
+*/
+
+export function LoginButton({ isLoading }: { isLoading?: boolean }) {
   const { pending } = useFormStatus();
+  const loading = isLoading || pending;
 
   return (
-    <Button type="submit" className="w-full h-12 text-lg" disabled={pending}>
-      {pending ? "로그인 중..." : "로그인"}
+    <Button type="submit" className="w-full h-12 text-lg" disabled={loading}>
+      {loading ? (
+        <>
+          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+          로그인 중...
+        </>
+      ) : (
+        "로그인"
+      )}
     </Button>
   );
 }

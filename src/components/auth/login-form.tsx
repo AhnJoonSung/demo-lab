@@ -13,7 +13,7 @@
  * 4. 로그인 로딩 상태 표시
  * 5. 카카오 소셜 로그인 버튼 및 구분선 포함
  * 6. 회원가입 모드로 전환하는 버튼 제공
- * 7. 인증 상태는 revalidatePath와 onAuthStateChange를 통해 자동으로 갱신됨
+ * 7. 인증 상태는 refreshUser와 onAuthStateChange를 통해 자동으로 갱신됨
  *
  * 구현 로직:
  * - React 상태(`useState`, `useActionState`)를 사용하여 폼 상태 및 서버 액션 상태 관리
@@ -41,6 +41,7 @@ import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { LoginButton, KakaoButton } from "@/components/auth/buttons";
 import { login } from "@/actions/auth";
+import { useAuth } from "@/components/auth/auth-provider";
 
 // 초기 상태 정의
 const initialState = {
@@ -61,17 +62,22 @@ export function LoginForm({
   onEmailChange,
 }: LoginFormProps) {
   const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+  const { refreshUser } = useAuth();
   const [loginState, loginAction] = useActionState(login, initialState);
 
   // 리다이렉트 처리
   useEffect(() => {
     if (loginState?.shouldRedirect && loginState?.redirectTo) {
-      // login 서버 액션에서 revalidatePath를 호출하여 인증 상태를 전체 레이아웃에 반영
-      // Supabase의 onAuthStateChange 이벤트도 발생하여 AuthProvider 상태 갱신
-      router.replace(loginState.redirectTo);
+      setIsLoading(true);
+
+      // 로그인 성공 시 인증 상태 갱신 후 리다이렉트
+      refreshUser().then(() => {
+        router.replace(loginState.redirectTo);
+      });
     }
-  }, [loginState, router]);
+  }, [loginState, router, refreshUser]);
 
   // 이메일 변경 핸들러
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -151,7 +157,7 @@ export function LoginForm({
         )}
       </div>
 
-      <LoginButton />
+      <LoginButton isLoading={isLoading} />
 
       <div className="relative my-4">
         <div className="absolute inset-0 flex items-center">

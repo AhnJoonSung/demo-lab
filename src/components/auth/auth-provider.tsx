@@ -43,14 +43,14 @@ type AuthContextType = {
   user: User | null;
   isLoading: boolean;
   error: string | null;
-  refreshUser: () => Promise<void>;
+  refreshUser: () => Promise<User | null>;
 };
 
 const AuthContext = createContext<AuthContextType>({
   user: null,
   isLoading: true,
   error: null,
-  refreshUser: async () => {},
+  refreshUser: async () => null,
 });
 
 export const useAuth = () => useContext(AuthContext);
@@ -65,16 +65,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   // 인증 상태를 수동으로 갱신하는 함수
   const refreshUser = useCallback(async () => {
+    console.log("[AuthProvider] 인증 상태 갱신 중...");
     setIsLoading(true);
     try {
       const { data, error } = await supabase.auth.getUser();
       if (error) {
         throw error;
       }
+      console.log("[AuthProvider] 인증 상태 갱신 성공:", data.user);
       setUser(data.user);
+      return data.user; // 갱신된 사용자 반환
     } catch (err) {
-      console.error("사용자 정보 가져오기 오류:", err);
+      console.error("[AuthProvider] 사용자 정보 가져오기 오류:", err);
       setError("사용자 정보를 가져오는데 실패했습니다.");
+      return null;
     } finally {
       setIsLoading(false);
     }
@@ -83,7 +87,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   // 초기 사용자 정보 로드 (컴포넌트 마운트 시 한 번만 실행)
   useEffect(() => {
     refreshUser();
-     
   }, [refreshUser]); // refreshUser는 useCallback으로 안정화되어 있으므로, 사실상 마운트 시 1회 실행
 
   // 인증 상태 변경 이벤트 구독 (별도의 useEffect로 분리)
@@ -115,7 +118,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return () => {
       authListener?.subscription.unsubscribe();
     };
-     
   }, [supabase, router, pathname]); // pathname은 SIGNED_OUT 시 리디렉션 조건에 사용되므로 포함
 
   return (

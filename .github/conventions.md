@@ -1,6 +1,5 @@
 # Conventions
 
-- [Package Manager](#package-manager)
 - [Git Convention](#git-convention)
   - [Branch Type Description](#branch-type-description)
   - [Commit Message Convention](#commit-message-convention)
@@ -9,26 +8,24 @@
   - [prettier](#prettier)
   - [pre-commit](#pre-commit)
 - [NextJS Convention](#nextjs-convention)
+  - [Package Manager](#package-manager)
   - [File Name Convention](#file-name-convention)
   - [Function/Variable Convention](#functionvariable-convention)
   - [Component Convention](#component-convention)
   - [Directory Convention](#directory-convention)
     - [src/app](#srcapp)
     - [src/actions](#srcactions)
-    - [src/containers](#srccontainers)
     - [src/components](#srccomponents)
     - [src/constants](#srcconstants)
     - [src/hooks](#srchooks)
     - [src/utils](#srcutils)
-    - [src/services](#srcservices)
-    - [src/states](#srcstates)
+  - [src/states](#srcstates)
     - [src/types](#srctypes)
-  - [Testing Environment](#testing-environment)
-    - [Jest](#jest)
-- [Module Convention](#module-convention)
+- [Package Convention](#package-convention)
+  - [Vitest](#vitest)
   - [TailwindCSS](#tailwindcss)
   - [ShadCN Component](#shadcn-component)
-  - [Lucide](#lucide)
+  - [lucide-react](#lucide-react)
   - [Jotai](#jotai)
   - [React Query](#react-query)
   - [Supabase](#supabase)
@@ -36,10 +33,6 @@
   - [Code Writing](#code-writing)
   - [File Context](#file-context)
   - [Reference](#reference)
-
-## Package Manager
-
-[pnpm](https://pnpm.io/)을 사용합니다.
 
 ## Git Convention
 
@@ -121,7 +114,7 @@
 ### pre-commit
 
 ```shell
-pnpm install --save-dev husky prettier eslint lint-staged eslint-config-prettier
+pnpm install --save-dev husky prettier eslint lint-staged eslint-config-prettier eslint-plugin-react-hooks
 
 pnpm dlx husky-init
 pnpm pkg set scripts.prepare="husky install"
@@ -150,6 +143,10 @@ pnpm lint-staged
 
 ## NextJS Convention
 
+### Package Manager
+
+[pnpm](https://pnpm.io/)을 사용합니다.
+
 ### File Name Convention
 
 - 모든 파일 이름은 `kebab-case` 로 작성합니다.
@@ -162,7 +159,7 @@ pnpm lint-staged
 
 ### Component Convention
 
-- 컴포넌트 명과 파일명은 `PascalCase` 로 작성합니다.
+- Component 명은 `PascalCase` 로 작성합니다. (Component 파일명도 예외없이 `kebab-case`로 작성합니다)
 - Component는 재사용 가능하도록 설계해야 합니다.
 
 ### Directory Convention
@@ -180,11 +177,8 @@ nextjs에서는 여러 디렉토리 구조를 사용할 수 있지만, [`app` �
 
 #### src/actions
 
+- 무조건 API 대신 Server Action을 사용한다. 불가피한 경우에만 API를 사용한다.
 - NextJS Server Action 파일들을 넣어놓는다.
-
-#### src/containers
-
-- `page.tsx` 안에서 보여줄 컨텐츠들을 넣어놓는다.
 
 #### src/components
 
@@ -202,36 +196,74 @@ nextjs에서는 여러 디렉토리 구조를 사용할 수 있지만, [`app` �
 #### src/utils
 
 - 공통으로 사용되는 유틸 함수
+- e.g. supabase/client.ts, supabase/server.ts ...
 
-#### src/services
+### src/states
 
-- 각종 API 요청
-- GET, POST, PATCH...
-
-#### src/states
-
-- 페이지 곳곳에서 사용되는 state를 모아두는 곳
-- 전역 상태관리 남발하지 않는다. (props drilling을 막기 위해서는 `Jotai`를 사용)
+- props drilling을 막기 위한 전역 state를 모아둔다.
+- 전역 상태관리는 최대한 남발하지 않으며 jotai를 사용한다.
 
 #### src/types
 
 - 각종 타입 스크립트의 정의가 들어가는 곳
 
-### Testing Environment
+### tests
 
-- [NetxJS/Testing](https://nextjs.org/docs/pages/building-your-application/testing)
+- 테스트 파일을 모아두는 곳
 
-#### Jest
+## Package Convention
 
-- [Setting ui Jest with NextJS](https://nextjs.org/docs/pages/building-your-application/testing/jest)
+- [2025년을 위한 필수 React 라이브러리들](https://news.hada.io/topic?id=19556)
+- [React Libraries for 2025](https://www.robinwieruch.de/react-libraries/)
 
-```bash
-pnpm install -D jest jest-environment-jsdom @testing-library/react @testing-library/dom @testing-library/jest-dom ts-node
+### Vitest
 
-pnpm create jest@latest
+[How to set up Vitest with Next.js](https://nextjs.org/docs/pages/guides/testing/vitest)
+
+```sh
+pnpm install -D vitest @vitejs/plugin-react jsdom @testing-library/react @testing-library/dom vite-tsconfig-paths
 ```
 
-## Module Convention
+`vitest.config.mts`
+
+```json
+import { defineConfig } from 'vitest/config'
+import react from '@vitejs/plugin-react'
+import tsconfigPaths from 'vite-tsconfig-paths'
+
+export default defineConfig({
+  plugins: [tsconfigPaths(), react()],
+  test: {
+    environment: 'jsdom',
+  },
+})
+```
+
+`package.json`
+
+```json
+{
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "test": "vitest" // 추가
+  }
+}
+```
+
+테스트 예시: `__tests__/page.test.tsx`
+
+```tsx
+import { expect, test } from "vitest";
+import { render, screen } from "@testing-library/react";
+import Page from "../app/page";
+
+test("Page", () => {
+  render(<Page />);
+  expect(screen.getByRole("heading", { level: 1, name: "Home" })).toBeDefined();
+});
+```
 
 ### TailwindCSS
 
@@ -245,9 +277,9 @@ pnpm create jest@latest
 - 컴포넌트 사용 전 설치 여부를 확인해야 합니다: `/component/ui` 디렉토리 체크
 - 컴포넌트 설치 명령어를 사용해야 합니다: `pnpx shadcn@latest add [component-name]`
 
-### Lucide
+### lucide-react
 
-- 모든 아이콘은 Lucide를 사용해야 합니다.
+- 모든 아이콘은 lucide-react를 사용해야 합니다.
 - 아이콘 임포트 방법: `import { IconName } from 'lucide-react';`
 - 예시: `import { Menu, X } from 'lucide-react';`
 

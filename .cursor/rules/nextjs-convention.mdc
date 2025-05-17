@@ -66,6 +66,10 @@ pnpm을 사용합니다.
 
 - 각종 타입 스크립트의 정의가 들어가는 곳
 
+### tests
+
+- 테스트 파일을 모아두는 곳
+
 ## Package Convention
 
 ### Vitest

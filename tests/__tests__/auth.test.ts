@@ -26,7 +26,7 @@ class MockFormData {
 }
 
 // Zod 스키마 모킹
-vi.mock("@/types/schema", () => {
+vi.mock("@/types/auth", () => {
   return {
     loginSchema: {
       safeParse: vi.fn((data) => {

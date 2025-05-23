@@ -44,6 +44,12 @@ export const signupSchema = z.object({
     ),
 });
 
+// 매직 링크 폼 스키마
+export const magicLinkSchema = z.object({
+  email: z.string().email("유효한 이메일 주소를 입력해주세요."),
+});
+
 // 입력 타입 정의
 export type LoginFormInput = z.infer<typeof loginSchema>;
 export type SignupFormInput = z.infer<typeof signupSchema>;
+export type MagicLinkFormInput = z.infer<typeof magicLinkSchema>;

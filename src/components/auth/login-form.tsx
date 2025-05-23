@@ -43,6 +43,7 @@ import {
   LoginButton,
   KakaoButton,
   GoogleButton,
+  MagicLinkButton,
 } from "@/components/auth/buttons";
 import { login } from "@/actions/auth";
 import { useAuth } from "@/components/auth/auth-provider";
@@ -67,6 +68,7 @@ export function LoginForm({
 }: LoginFormProps) {
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [magicLinkSent, setMagicLinkSent] = useState(false);
   const router = useRouter();
   const { refreshUser } = useAuth();
   const [loginState, loginAction] = useActionState(login, initialState);
@@ -100,6 +102,12 @@ export function LoginForm({
     loginAction(formData);
   };
 
+  // 매직 링크 전송 성공 핸들러
+  const handleMagicLinkSuccess = () => {
+    setMagicLinkSent(true);
+    setTimeout(() => setMagicLinkSent(false), 5000); // 5초 후 알림 제거
+  };
+
   return (
     <form action={handleLoginSubmit} className="space-y-4 sm:space-y-6">
       {loginState.error && (
@@ -114,6 +122,14 @@ export function LoginForm({
         <Alert>
           <AlertDescription className="text-green-600 dark:text-green-400">
             {loginState.success}
+          </AlertDescription>
+        </Alert>
+      )}
+
+      {magicLinkSent && (
+        <Alert>
+          <AlertDescription className="text-blue-600 dark:text-blue-400">
+            매직 링크를 이메일로 전송했습니다. 이메일을 확인해주세요.
           </AlertDescription>
         </Alert>
       )}
@@ -169,10 +185,12 @@ export function LoginForm({
         </div>
         <div className="relative flex justify-center text-xs uppercase">
           <span className="px-2 bg-card text-muted-foreground">
-            또는 소셜 계정으로 가입
+            또는 간편하게 로그인
           </span>
         </div>
       </div>
+
+      <MagicLinkButton email={email} onSuccess={handleMagicLinkSuccess} />
 
       <KakaoButton />
 

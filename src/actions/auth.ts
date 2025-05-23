@@ -35,7 +35,7 @@
 
 import { revalidatePath } from "next/cache";
 import { createServerSupabaseClient } from "@/utils/supabase/server";
-import { loginSchema, signupSchema } from "@/types/schema";
+import { loginSchema, signupSchema, magicLinkSchema } from "@/types/auth";
 
 // 액션 함수들의 반환 타입 정의
 type ActionState = {
@@ -188,6 +188,74 @@ export async function signup(
     };
   } catch (error) {
     console.error("Signup error:", error);
+    return {
+      error: "서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요.",
+      success: null,
+    };
+  }
+}
+
+export async function sendMagicLink(
+  prevState: ActionState | null,
+  formData: FormData,
+): Promise<ActionState> {
+  try {
+    const email = formData.get("email") as string;
+
+    // Zod 스키마를 사용한 유효성 검사
+    const result = magicLinkSchema.safeParse({ email });
+
+    if (!result.success) {
+      const fieldErrors: Record<string, string | undefined> = {};
+
+      // Zod 에러 형식화
+      result.error.errors.forEach((error) => {
+        const path = error.path[0] as string;
+        fieldErrors[path] = error.message;
+      });
+
+      return {
+        error: "입력 필드를 확인해주세요.",
+        success: null,
+        fieldErrors,
+      };
+    }
+
+    // Supabase 클라이언트 생성
+    const supabase = await createServerSupabaseClient();
+
+    // 매직 링크 전송
+    const { error } = await supabase.auth.signInWithOtp({
+      email,
+      options: {
+        emailRedirectTo: `${
+          process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"
+        }/auth/callback`,
+      },
+    });
+
+    // 매직 링크 전송 오류 처리
+    if (error) {
+      // 알려진 오류 패턴에 따라 더 친절한 메시지 제공
+      let errorMessage = error.message;
+      if (error.message.includes("rate limit")) {
+        errorMessage =
+          "너무 많은 요청이 있었습니다. 잠시 후 다시 시도해주세요.";
+      }
+      if (error.message.includes("invalid email")) {
+        errorMessage = "유효하지 않은 이메일 주소입니다.";
+      }
+
+      return { error: errorMessage, success: null };
+    }
+
+    // 매직 링크 전송 성공
+    return {
+      success: "매직 링크를 이메일로 전송했습니다. 이메일을 확인해주세요.",
+      error: null,
+    };
+  } catch (error) {
+    console.error("Magic link error:", error);
     return {
       error: "서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요.",
       success: null,

@@ -308,3 +308,119 @@ export function GoogleButton() {
     </Button>
   );
 }
+
+export function MagicLinkButton({
+  email,
+  onSuccess,
+}: {
+  email: string;
+  onSuccess?: () => void;
+}) {
+  const { pending } = useFormStatus();
+  const [isLoading, setIsLoading] = useState(false);
+  const [cooldown, setCooldown] = useState(0);
+
+  // 쿨다운 타이머
+  const startCooldown = () => {
+    setCooldown(60);
+    const timer = setInterval(() => {
+      setCooldown((prev) => {
+        if (prev <= 1) {
+          clearInterval(timer);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+  };
+
+  const handleMagicLinkClick = async () => {
+    if (!email || cooldown > 0) return;
+
+    try {
+      setIsLoading(true);
+
+      // 폼 데이터 생성
+      const formData = new FormData();
+      formData.set("email", email);
+
+      // sendMagicLink 서버 액션 호출
+      const { sendMagicLink } = await import("@/actions/auth");
+      const result = await sendMagicLink(null, formData);
+
+      if (result.error) {
+        console.error("매직 링크 전송 오류:", result.error);
+      } else if (result.success) {
+        startCooldown();
+        onSuccess?.();
+      }
+    } catch (error) {
+      console.error("매직 링크 버튼 오류:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const loading = isLoading || pending;
+  const disabled = loading || !email || cooldown > 0;
+
+  return (
+    <Button
+      type="button"
+      onClick={handleMagicLinkClick}
+      disabled={disabled}
+      className="
+        w-full
+        h-12
+        rounded-md
+        bg-gradient-to-r
+        from-purple-500
+        to-pink-500
+        hover:from-purple-600
+        hover:to-pink-600
+        text-white
+        font-medium
+        flex
+        items-center
+        justify-center
+        transition-all
+        duration-200
+        border-0
+        relative
+        px-0
+        py-0
+        disabled:opacity-50
+        disabled:cursor-not-allowed
+      "
+    >
+      {loading ? (
+        <div className="flex items-center justify-center">
+          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+          <span>전송 중...</span>
+        </div>
+      ) : cooldown > 0 ? (
+        <div className="flex items-center justify-center">
+          <span>재전송 가능 ({cooldown}초)</span>
+        </div>
+      ) : (
+        <div className="flex items-center justify-center w-full h-full">
+          <svg
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="mr-2"
+          >
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+            <polyline points="22,6 12,13 2,6"></polyline>
+          </svg>
+          <span>매직 링크로 로그인</span>
+        </div>
+      )}
+    </Button>
+  );
+}

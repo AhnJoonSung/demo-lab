@@ -19,7 +19,7 @@
  * - React 상태(`useState`, `useActionState`)를 사용하여 폼 상태 및 서버 액션 상태 관리
  * - `useRouter`를 사용하여 인증 성공 후 페이지 리다이렉트
  * - Props를 통해 이메일 값 및 상태 변경 핸들러, 모드 전환 핸들러 전달받음
- * - `@/components/auth/buttons`에서 `LoginButton` 및 `KakaoButton` 컴포넌트 활용
+ * - `@/components/auth/buttons`에서 `LoginButton`, `KakaoButton`, `GoogleButton` 컴포넌트 활용
  * - 인라인으로 소셜 로그인 구분선 구현 (다크 모드 대응 포함)
  *
  * @dependencies
@@ -39,7 +39,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { LoginButton, KakaoButton } from "@/components/auth/buttons";
+import {
+  LoginButton,
+  KakaoButton,
+  GoogleButton,
+} from "@/components/auth/buttons";
 import { login } from "@/actions/auth";
 import { useAuth } from "@/components/auth/auth-provider";
 
@@ -171,6 +175,8 @@ export function LoginForm({
       </div>
 
       <KakaoButton />
+
+      <GoogleButton />
 
       <div className="text-center">
         <Button

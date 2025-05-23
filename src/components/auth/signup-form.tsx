@@ -20,7 +20,7 @@
  * - `useRouter`를 사용하여 인증 성공 후 페이지 리다이렉트
  * - Props (`email`, `onEmailChange`, `onModeChange`)를 통해 이메일 값, 이메일 상태 변경 핸들러, 모드 전환 핸들러 전달받음
  * - 비밀번호 요구사항 충족 여부를 실시간 검증 (`isPasswordValid`)
- * - `@/components/auth/buttons`에서 `SignupButton` 및 `KakaoButton` 컴포넌트 활용
+ * - `@/components/auth/buttons`에서 `SignupButton`, `KakaoButton`, `GoogleButton` 컴포넌트 활용
  * - 인라인으로 소셜 로그인 구분선 구현 (다크 모드 대응 포함)
  *
  * @dependencies
@@ -41,7 +41,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { SignupButton, KakaoButton } from "@/components/auth/buttons";
+import {
+  SignupButton,
+  KakaoButton,
+  GoogleButton,
+} from "@/components/auth/buttons";
 import {
   PasswordRequirements,
   isPasswordValid,
@@ -195,6 +199,12 @@ export function SignupForm({
         className={isSignupSuccessful ? "opacity-50 pointer-events-none" : ""}
       >
         <KakaoButton />
+      </div>
+
+      <div
+        className={isSignupSuccessful ? "opacity-50 pointer-events-none" : ""}
+      >
+        <GoogleButton />
       </div>
 
       <div className="text-center">

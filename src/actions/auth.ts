@@ -36,6 +36,7 @@
 import { revalidatePath } from "next/cache";
 import { createServerSupabaseClient } from "@/utils/supabase/server";
 import { loginSchema, signupSchema, magicLinkSchema } from "@/types/auth";
+import { getAuthCallbackURL } from "@/utils/url";
 
 // 액션 함수들의 반환 타입 정의
 type ActionState = {
@@ -202,6 +203,9 @@ export async function sendMagicLink(
   try {
     const email = formData.get("email") as string;
 
+    console.group("📧 매직 링크 전송 시작");
+    console.log("이메일:", email);
+
     // Zod 스키마를 사용한 유효성 검사
     const result = magicLinkSchema.safeParse({ email });
 
@@ -214,6 +218,9 @@ export async function sendMagicLink(
         fieldErrors[path] = error.message;
       });
 
+      console.log("❌ 유효성 검사 실패:", fieldErrors);
+      console.groupEnd();
+
       return {
         error: "입력 필드를 확인해주세요.",
         success: null,
@@ -221,41 +228,58 @@ export async function sendMagicLink(
       };
     }
 
-    // Supabase 클라이언트 생성
     const supabase = await createServerSupabaseClient();
+
+    // 동적 콜백 URL 생성
+    const emailRedirectTo = getAuthCallbackURL();
+    console.log("🔗 콜백 URL:", emailRedirectTo);
 
     // 매직 링크 전송
     const { error } = await supabase.auth.signInWithOtp({
-      email,
+      email: result.data.email,
       options: {
-        emailRedirectTo: `${
-          process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"
-        }/auth/callback`,
+        emailRedirectTo,
+        shouldCreateUser: true, // 사용자가 없으면 자동 생성
       },
     });
 
-    // 매직 링크 전송 오류 처리
     if (error) {
-      // 알려진 오류 패턴에 따라 더 친절한 메시지 제공
-      let errorMessage = error.message;
-      if (error.message.includes("rate limit")) {
-        errorMessage =
-          "너무 많은 요청이 있었습니다. 잠시 후 다시 시도해주세요.";
-      }
-      if (error.message.includes("invalid email")) {
+      console.log("❌ Supabase 에러:", error.message);
+      console.groupEnd();
+
+      // Supabase 에러 메시지를 사용자 친화적으로 변환
+      let errorMessage = "매직 링크 전송에 실패했습니다.";
+
+      if (
+        error.message.includes("invalid email") ||
+        error.message.includes("Invalid email")
+      ) {
         errorMessage = "유효하지 않은 이메일 주소입니다.";
+      } else if (
+        error.message.includes("rate limit") ||
+        error.message.includes("too many requests")
+      ) {
+        errorMessage =
+          "너무 많은 요청이 발생했습니다. 잠시 후 다시 시도해주세요.";
       }
 
-      return { error: errorMessage, success: null };
+      return {
+        error: errorMessage,
+        success: null,
+      };
     }
 
-    // 매직 링크 전송 성공
+    console.log("✅ 매직 링크 전송 성공");
+    console.groupEnd();
+
     return {
-      success: "매직 링크를 이메일로 전송했습니다. 이메일을 확인해주세요.",
       error: null,
+      success: "이메일로 전송된 매직 링크를 확인해주세요!",
     };
-  } catch (error) {
-    console.error("Magic link error:", error);
+  } catch (err) {
+    console.log("❌ 예상치 못한 에러:", err);
+    console.groupEnd();
+
     return {
       error: "서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요.",
       success: null,

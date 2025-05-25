@@ -26,6 +26,15 @@
  * - @/components/ui/button (ShadcnUI Button)
  * - @/utils/supabase/client
  * - @supabase/supabase-js (signInWithOAuth)
+ *
+ * 실제 로그인 흐름
+ * 1. 사용자가 로그인 버튼 클릭
+ * 2. 서버 액션 시작 → pending = true
+ * 3. 서버 액션 완료 → pending = false
+ * 4. 로그인 성공 시 → setIsLoading(true) 설정
+ * 5. refreshUser() 호출 및 완료
+ * 6. 리다이렉트 시작
+ * 7. (리다이렉트 후) → isLoading = false(새 페이지에서 리셋)
  */
 
 "use client";
@@ -36,17 +45,7 @@ import { Button } from "@/components/ui/button";
 import { createBrowserSupabaseClient } from "@/utils/supabase/client";
 import { useFormStatus } from "react-dom";
 import { Loader2 } from "lucide-react";
-
-/*
-실제 로그인 흐름
-1. 사용자가 로그인 버튼 클릭
-2. 서버 액션 시작 → pending = true
-3. 서버 액션 완료 → pending = false
-4. 로그인 성공 시 → setIsLoading(true) 설정
-5. refreshUser() 호출 및 완료
-6. 리다이렉트 시작
-7. (리다이렉트 후) → isLoading = false(새 페이지에서 리셋)
-*/
+import { sendMagicLink } from "@/actions/auth";
 
 export function LoginButton({ isLoading }: { isLoading?: boolean }) {
   const { pending } = useFormStatus();
@@ -316,7 +315,6 @@ export function MagicLinkButton({
   email: string;
   onSuccess?: () => void;
 }) {
-  const { pending } = useFormStatus();
   const [isLoading, setIsLoading] = useState(false);
   const [cooldown, setCooldown] = useState(0);
 
@@ -345,30 +343,29 @@ export function MagicLinkButton({
       formData.set("email", email);
 
       // sendMagicLink 서버 액션 호출
-      const { sendMagicLink } = await import("@/actions/auth");
       const result = await sendMagicLink(null, formData);
 
-      if (result.error) {
-        console.error("매직 링크 전송 오류:", result.error);
-      } else if (result.success) {
-        startCooldown();
-        onSuccess?.();
+      if (result.success) {
+        startCooldown(); // 쿨다운 시작
+        onSuccess?.(); // 성공 콜백 호출
+      } else {
+        console.error("매직 링크 전송 실패:", result.error);
+        // 여기서 toast나 alert로 에러 표시 가능
       }
     } catch (error) {
-      console.error("매직 링크 버튼 오류:", error);
+      console.error("매직 링크 버튼 에러:", error);
     } finally {
       setIsLoading(false);
     }
   };
 
-  const loading = isLoading || pending;
-  const disabled = loading || !email || cooldown > 0;
+  const isDisabled = !email || isLoading || cooldown > 0;
 
   return (
     <Button
       type="button"
       onClick={handleMagicLinkClick}
-      disabled={disabled}
+      disabled={isDisabled}
       className="
         w-full
         h-12
@@ -393,7 +390,7 @@ export function MagicLinkButton({
         disabled:cursor-not-allowed
       "
     >
-      {loading ? (
+      {isLoading ? (
         <div className="flex items-center justify-center">
           <Loader2 className="mr-2 h-4 w-4 animate-spin" />
           <span>전송 중...</span>

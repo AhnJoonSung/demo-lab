@@ -1,8 +1,10 @@
 .
 ├── components.json
 ├── eslint.config.mjs
+├── next-env.d.ts
 ├── next.config.ts
 ├── package.json
+├── pnpm-lock.yaml
 ├── pnpm-workspace.yaml
 ├── postcss.config.mjs
 ├── public
@@ -56,68 +58,79 @@
 │   │   │   ├── file-list.tsx
 │   │   │   └── file-uploader.tsx
 │   │   └── ui
-│   │       ├── accordion.tsx
-│   │       ├── alert-dialog.tsx
-│   │       ├── alert.tsx
-│   │       ├── aspect-ratio.tsx
-│   │       ├── avatar.tsx
-│   │       ├── badge.tsx
-│   │       ├── breadcrumb.tsx
-│   │       ├── button.tsx
-│   │       ├── calendar.tsx
-│   │       ├── card.tsx
-│   │       ├── carousel.tsx
-│   │       ├── chart.tsx
-│   │       ├── checkbox.tsx
-│   │       ├── collapsible.tsx
-│   │       ├── command.tsx
-│   │       ├── context-menu.tsx
-│   │       ├── dialog.tsx
-│   │       ├── drawer.tsx
-│   │       ├── dropdown-menu.tsx
-│   │       ├── form.tsx
-│   │       ├── hover-card.tsx
-│   │       ├── input-otp.tsx
-│   │       ├── input.tsx
-│   │       ├── label.tsx
-│   │       ├── menubar.tsx
-│   │       ├── navigation-menu.tsx
-│   │       ├── pagination.tsx
-│   │       ├── popover.tsx
-│   │       ├── progress.tsx
-│   │       ├── radio-group.tsx
-│   │       ├── resizable.tsx
-│   │       ├── scroll-area.tsx
-│   │       ├── select.tsx
-│   │       ├── separator.tsx
-│   │       ├── sheet.tsx
-│   │       ├── sidebar.tsx
-│   │       ├── skeleton.tsx
-│   │       ├── slider.tsx
-│   │       ├── sonner.tsx
-│   │       ├── switch.tsx
-│   │       ├── table.tsx
-│   │       ├── tabs.tsx
-│   │       ├── textarea.tsx
-│   │       ├── theme-provider.tsx
-│   │       ├── theme-toggle.tsx
-│   │       ├── toggle-group.tsx
-│   │       ├── toggle.tsx
-│   │       └── tooltip.tsx
+│   │   ├── accordion.tsx
+│   │   ├── alert-dialog.tsx
+│   │   ├── alert.tsx
+│   │   ├── aspect-ratio.tsx
+│   │   ├── avatar.tsx
+│   │   ├── badge.tsx
+│   │   ├── breadcrumb.tsx
+│   │   ├── button.tsx
+│   │   ├── calendar.tsx
+│   │   ├── card.tsx
+│   │   ├── carousel.tsx
+│   │   ├── chart.tsx
+│   │   ├── checkbox.tsx
+│   │   ├── collapsible.tsx
+│   │   ├── command.tsx
+│   │   ├── context-menu.tsx
+│   │   ├── dialog.tsx
+│   │   ├── drawer.tsx
+│   │   ├── dropdown-menu.tsx
+│   │   ├── form.tsx
+│   │   ├── hover-card.tsx
+│   │   ├── input-otp.tsx
+│   │   ├── input.tsx
+│   │   ├── label.tsx
+│   │   ├── menubar.tsx
+│   │   ├── navigation-menu.tsx
+│   │   ├── pagination.tsx
+│   │   ├── popover.tsx
+│   │   ├── progress.tsx
+│   │   ├── radio-group.tsx
+│   │   ├── resizable.tsx
+│   │   ├── scroll-area.tsx
+│   │   ├── select.tsx
+│   │   ├── separator.tsx
+│   │   ├── sheet.tsx
+│   │   ├── sidebar.tsx
+│   │   ├── skeleton.tsx
+│   │   ├── slider.tsx
+│   │   ├── sonner.tsx
+│   │   ├── switch.tsx
+│   │   ├── table.tsx
+│   │   ├── tabs.tsx
+│   │   ├── textarea.tsx
+│   │   ├── theme-provider.tsx
+│   │   ├── theme-toggle.tsx
+│   │   ├── toggle-group.tsx
+│   │   ├── toggle.tsx
+│   │   └── tooltip.tsx
 │   ├── hooks
 │   │   └── use-mobile.ts
 │   ├── lib
 │   │   └── utils.ts
 │   ├── middleware.ts
 │   ├── types
-│   │   └── schema.ts
+│   │   └── auth.ts
 │   └── utils
-│       ├── seo
-│       │   ├── constants.ts
-│       │   └── metadata.ts
-│       └── supabase
-│           ├── client.ts
-│           ├── middleware.ts
-│           ├── server.ts
-│           └── storage.ts
-└── tsconfig.json
+│   ├── seo
+│   │   ├── constants.ts
+│   │   └── metadata.ts
+│   ├── supabase
+│   │   ├── client.ts
+│   │   ├── middleware.ts
+│   │   ├── server.ts
+│   │   └── storage.ts
+│   └── url.ts
+├── tests
+│   ├── **tests**
+│   │   ├── auth.test.ts
+│   │   ├── magic-link.test.ts
+│   │   └── storage.test.ts
+│   ├── README.md
+│   └── setup.ts
+├── tsconfig.json
+└── vitest.config.ts
+
+25 directories, 109 files

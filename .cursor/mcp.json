@@ -14,7 +14,7 @@
     },
     "supabase": {
       "command": "bun x",
-      "args": ["@supabase/mcp-server-supabase@latest", "--access-token", "your_supabase_access_token"]
+      "args": ["@supabase/mcp-server-supabase@latest", "--access-token", "sbp_cbba74689f6ed439de5460ae1cd3fbee931fed5b"]
     }
   }
 }
